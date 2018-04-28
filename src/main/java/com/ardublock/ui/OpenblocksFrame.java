@@ -1,26 +1,19 @@
 package com.ardublock.ui;
 
-import java.awt.BorderLayout;
-import java.awt.Cursor;
-import java.awt.Desktop;
-import java.awt.Dimension;
-import java.awt.FlowLayout;
-import java.awt.Graphics2D;
+import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
+import java.io.InputStream;
 import java.net.URL;
+import java.nio.file.FileSystems;
+import java.nio.file.Path;
 import java.util.ResourceBundle;
 
 import javax.imageio.ImageIO;
-import javax.swing.JButton;
-import javax.swing.JFileChooser;
-import javax.swing.JFrame;
-import javax.swing.JLabel;
-import javax.swing.JOptionPane;
-import javax.swing.JPanel;
+import javax.swing.*;
 import javax.swing.filechooser.FileFilter;
 import javax.swing.filechooser.FileNameExtensionFilter;
 
@@ -100,9 +93,40 @@ public class OpenblocksFrame extends JFrame
 		workspace.addWorkspaceListener(new ArdublockWorkspaceListener(this));
 		
 		JPanel buttons = new JPanel();
+
+
+		InputStream stream = getClass().getResourceAsStream("/com/ardublock/block/keyboard.png");
+		System.out.println(stream);
+		ImageIcon icon= null;
+		try {
+			icon = new ImageIcon(ImageIO.read(stream));
+		} catch (IOException e) {
+				e.printStackTrace();
+			}
+		JLabel image = new JLabel();
+        image.setIcon(icon);
+		buttons.add(image);
+		buttons.setBackground(Color.BLUE);
+
 		buttons.setLayout(new FlowLayout());
 		JButton newButton = new JButton(uiMessageBundle.getString("ardublock.ui.new"));
-		newButton.addActionListener(new NewButtonListener(this));
+		Image img = null;
+        try {
+
+             img = ImageIO.read(getClass().getResource("/com/ardublock/block/keyboard.png"));
+
+        } catch (Exception ex) {
+			System.out.println("EXC: "+ex.toString());
+        }
+
+		newButton.setIcon(new ImageIcon(img));
+
+
+        newButton.addActionListener(new NewButtonListener(this));
+
+
+
+
 		JButton saveButton = new JButton(uiMessageBundle.getString("ardublock.ui.save"));
 		saveButton.addActionListener(new SaveButtonListener(this));
 		JButton saveAsButton = new JButton(uiMessageBundle.getString("ardublock.ui.saveAs"));
